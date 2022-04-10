@@ -1,0 +1,27 @@
+version: "3.5"
+
+services:
+  db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - 3306:3306
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample_gin_app_db
+      MYSQL_USER: sample_gin_user
+      MYSQL_PASSWORD: passw0rd
+      TZ: Asia/Tokyo
+    volumes:
+      - "./mysql_data:/var/lib/mysql"
+  app:
+    build: .
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/go/src/app
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
